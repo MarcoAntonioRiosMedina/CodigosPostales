@@ -1,0 +1,40 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+
+        public class Diagnostico {
+            public static final String coma =",";
+            public static void main(String[] args) throws IOException {
+                BufferedReader buf = null;
+                try {
+                    buf = new BufferedReader(new FileReader("src/codigos_postales_hmo.csv")); //Source of  the file
+                    String linea = buf.readLine();
+                    HashMap<String,Integer> contador = new HashMap<>();
+                    while (linea != null) {
+                        String[] cells = linea.split(coma);
+
+                        for (String s: cells){
+                            String sevenChars = s.substring(1, Math.min(7, s.length()));
+                            contador.put(sevenChars, contador.getOrDefault(sevenChars,0)+1);
+                        }
+                        linea = buf.readLine();
+                    }
+                    for (String s : contador.keySet()){
+                        int cantidad = contador.get(s);
+                        if (cantidad>1){
+                            System.out.println("Codigo postal: "+ s +" Cantidad:" + cantidad);
+                        }
+                    }
+                } finally {
+                    if (buf != null){
+                        try{
+                            buf.close();
+                        }
+                        catch (IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
